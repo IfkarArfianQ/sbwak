@@ -19,6 +19,10 @@ require 'cek.php';
             .zoomable{
                 width: 100px;
             }
+            a{
+                text-decoration: none;
+                color: black;
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -44,7 +48,7 @@ require 'cek.php';
                                 <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
                                 Barang keluar
                             </a>
-                            <a class="nav-link" href="admin.php">
+                            <a class="nav-link" href="admin.php">       
                                 <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
                                 Kelola Admin
                             </a>
@@ -142,7 +146,7 @@ require 'cek.php';
                                             <tr>
                                                 <td><?=$i++;?></td>
                                                 <td><?=$img;?></td>
-                                                <td><?=$namabarang;?></td>
+                                                <td><strong><a href="detail.php?id=<?=$idbarang?>"><?=$namabarang;?></a></strong></td>
                                                 <td><?=$deskripsi;?></td>
                                                 <td><?=$stock;?></td>
                                                 <td>
