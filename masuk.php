@@ -19,6 +19,9 @@ require 'cek.php';
             .zoomable{
                 width: 100px;
             }
+            .tambahkan{
+                margin-right: 230px;
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -72,12 +75,27 @@ require 'cek.php';
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
                                     <i class="fas fa-table mr-1"></i>
-                                    Data Table Barang
+                                    Data Table Barang Masuk
                                 </div>
                                 <!-- Button untuk membuka form insert-->
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+                                <button type="button" class="tambahkan btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
                                     Tambahkan
                                 </button>
+                                <div class="row">
+                                    <div class="col">
+                                        <form method="post" class="form-inline">
+                                            <div class="form-group">
+                                                <label for="tgl_mulai" class="mr-2">Tanggal Mulai :</label>
+                                                <input type="date" id="tgl_mulai" name="tgl_mulai" class="form-control mr-2">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tgl_selesai" class="mr-2">Tanggal Selesai :</label>
+                                                <input type="date" id="tgl_selesai" name="tgl_selesai" class="form-control mr-2">
+                                            </div>
+                                            <button type="submit" name="filter_tgl" class="btn btn-info">Filter</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -97,8 +115,23 @@ require 'cek.php';
                                         <!-- Menampilkan data yang ada pada tabel database ke dalam tabel stock -->
                                         <tbody>
                                             <?php
-                                            $result = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");
-                                            $i= 1;
+
+                                            if(isset($_POST['filter_tgl'])){
+                                                $mulai = $_POST['tgl_mulai'];
+                                                $selesai = $_POST['tgl_selesai'];
+
+                                                if($mulai!=null || $selesai!=null){
+                                                    $result = mysqli_query($conn, "SELECT * FROM masuk m JOIN stock s ON s.idbarang = m.idbarang 
+                                                    WHERE m.tanggal BETWEEN '$mulai' AND DATE_ADD('$selesai', INTERVAL 1 DAY) ORDER BY m.idmasuk DESC");
+                                                } else {
+                                                    $result = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");
+                                                }
+                                                
+                                            } else {
+                                                $result = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");
+                                            }
+                                                
+                                            $i= 1;                                     
                                             while($row = mysqli_fetch_assoc($result)) {
                                                 $idm = $row['idmasuk'];
                                                 $idbarang = $row['idbarang'];
