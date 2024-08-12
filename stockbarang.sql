@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 05, 2024 at 12:52 PM
+-- Generation Time: Aug 12, 2024 at 10:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -67,7 +67,8 @@ INSERT INTO `login` (`iduser`, `email`, `password`) VALUES
 (4, 'ifkararfian@gmail.com', '123'),
 (6, 'ifkararfian11@gmail.com', '1234'),
 (8, 'xyuraa11@gmail.com', '1234'),
-(9, 'xyuraa12@gmail.com', '1234');
+(9, 'xyuraa12@gmail.com', '1234'),
+(12, 'yura@gmail.com', '123');
 
 -- --------------------------------------------------------
 
@@ -101,6 +102,36 @@ INSERT INTO `masuk` (`idmasuk`, `idbarang`, `tanggal`, `penerima`, `qty`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `peminjaman`
+--
+
+CREATE TABLE `peminjaman` (
+  `idpeminjaman` int(11) NOT NULL,
+  `idbarang` int(11) NOT NULL,
+  `tanggalpinjam` timestamp NOT NULL DEFAULT current_timestamp(),
+  `qty` int(11) NOT NULL,
+  `peminjam` varchar(30) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'Dipinjam'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `peminjaman`
+--
+
+INSERT INTO `peminjaman` (`idpeminjaman`, `idbarang`, `tanggalpinjam`, `qty`, `peminjam`, `status`) VALUES
+(1, 9, '2024-08-08 06:32:41', 50, 'Depon', 'Kembali'),
+(2, 3, '2024-08-08 07:03:44', 10, 'Depon', 'Kembali'),
+(3, 9, '2024-08-08 08:06:30', 50, 'Depon', 'Kembali'),
+(4, 2, '2024-08-08 08:20:04', 10, 'Depon', 'Kembali'),
+(5, 2, '2024-08-08 08:21:12', 10, 'Xyuraa', 'Kembali'),
+(6, 2, '2024-08-09 06:39:21', 10, 'Xyuraa', 'Dipinjam'),
+(7, 9, '2024-08-09 06:39:37', 50, 'Elga', 'Kembali'),
+(8, 1, '2024-08-12 04:54:58', 10, 'Depon', 'Kembali'),
+(9, 9, '2024-08-12 05:01:21', 50, 'Xyuraa', 'Dipinjam');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `stock`
 --
 
@@ -118,8 +149,8 @@ CREATE TABLE `stock` (
 
 INSERT INTO `stock` (`idbarang`, `namabarang`, `deskripsi`, `stock`, `image`) VALUES
 (1, 'Poco X3 Pro', 'Sebuah Handphone Product Xiaomi', 0, '9458f86387ed07022e6fe469846261b7.png'),
-(2, 'Iphone 13 Pro Max', 'Sebuah Handphone', 40, 'bf8558011e663316fc886b3dc7b048af.jpg'),
-(3, 'Nike', 'Sebuah Sepatu', 42, 'e28deb7af13fd0fbb002ab600a8e2a62.jpg'),
+(2, 'Iphone 13 Pro Max', 'Sebuah Handphone', 30, 'bf8558011e663316fc886b3dc7b048af.jpg'),
+(3, 'Nike', 'Sebuah Sepatu', 52, 'e28deb7af13fd0fbb002ab600a8e2a62.jpg'),
 (4, 'Gas LPG 3KG', 'gas buat masak', 35, '047c67b326e5f59df86399870d1f82f8.jpeg'),
 (9, 'Indomie Goreng', 'Mie goreng instant', 200, '115be5fb2654d254053390b900dbcb9d.jpg'),
 (11, 'Indomie rebus', 'Mie kuah instant', 45, 'ae3f1cb5016a8c2038115bee42918852.jpeg'),
@@ -149,6 +180,12 @@ ALTER TABLE `masuk`
   ADD PRIMARY KEY (`idmasuk`);
 
 --
+-- Indexes for table `peminjaman`
+--
+ALTER TABLE `peminjaman`
+  ADD PRIMARY KEY (`idpeminjaman`);
+
+--
 -- Indexes for table `stock`
 --
 ALTER TABLE `stock`
@@ -168,13 +205,19 @@ ALTER TABLE `keluar`
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `masuk`
 --
 ALTER TABLE `masuk`
   MODIFY `idmasuk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT for table `peminjaman`
+--
+ALTER TABLE `peminjaman`
+  MODIFY `idpeminjaman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `stock`
