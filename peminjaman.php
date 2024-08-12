@@ -4,35 +4,38 @@ require 'cek.php';
 
 // Get data 
 
-// Mengambil jumlah total data barang masuk yang ada
-$get1 = mysqli_query($conn, "SELECT * FROM masuk");
-$count1 = mysqli_num_rows($get1);
+// Ambil jumlah total data peminjaman yang ada
+$get1 = mysqli_query($conn,"SELECT * FROM peminjaman");
+$count1 =  mysqli_num_rows($get1);
 
-// Mengambil jumlah semua stock yang ada pada tabel barang masuk
-$get2 = mysqli_query($conn, "SELECT SUM(qty) AS total_stock FROM masuk");
-$row2 = mysqli_fetch_assoc($get2);
-$total_stock = $row2['total_stock'];
+// Ambil jumlah data peminjaman yang statusnya dipinjam
+$get2 = mysqli_query($conn,"SELECT * FROM peminjaman WHERE status='Dipinjam'");
+$count2 =  mysqli_num_rows($get2);
+
+// Ambil jumlah data peminjaman yang statusnya dipinjam
+$get3 = mysqli_query($conn,"SELECT * FROM peminjaman WHERE status='Kembali'");
+$count3 =  mysqli_num_rows($get3);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Barang Masuk</title>
-        <link href="css/styles.css" rel="stylesheet" />
-        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        <title>Peminjaman Barang</title>
+        <link href="css/styles.css" rel="stylesheet"/>
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
         <style>
             .zoomable{
                 width: 100px;
             }
             .tambahkan{
-                margin-right: 230px;
+                margin-right: 200px;
             }
         </style>
     </head>
@@ -82,21 +85,23 @@ $total_stock = $row2['total_stock'];
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Barang Masuk</h1>
+                        <h1 class="mt-4">Peminjaman Barang</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Stock barang yang masuk</li>
+                            <li class="breadcrumb-item active">Data Peminjaman Barang</li>
                         </ol>
                         
                         <div class="card mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <div>
                                     <i class="fas fa-table mr-1"></i>
-                                    Data Table Barang Masuk
+                                    Data Table Peminjaman Barang
                                 </div>
                                 <!-- Button untuk membuka form insert-->
                                 <button type="button" class="tambahkan btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
                                     Tambahkan
                                 </button>
+                                <br>
+
                                 <div class="row">
                                     <div class="col">
                                         <form method="post" class="form-inline">
@@ -112,89 +117,94 @@ $total_stock = $row2['total_stock'];
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div>          
+                            
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <div class="card bg-info text-white p-2">
-                                            <h6 class="m-0">Total Data Barang Masuk : <?=$count1;?></h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="card bg-success text-white p-2">
-                                            <h6 class="m-0">Total Barang Yang Masuk : <?=$total_stock;?> Barang</h6>
-                                        </div>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="card bg-info text-white p-2">
+                                        <h6 class="m-0">Total Data : <?=$count1;?></h6>
                                     </div>
                                 </div>
-                                <br>
+                                <div class="col-auto">
+                                    <div class="card bg-danger text-white p-2">
+                                        <h6 class="m-0">Dipinjam : <?=$count2;?></h6>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="card bg-success text-white p-2">
+                                        <h6 class="m-0">Dikembalikan : <?=$count3;?></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Gambar</th>
-                                                <th>Nama Barang</th>
                                                 <th>Tanggal</th>
+                                                <th>Nama Barang</th>
+                                                <th>Gambar</th>
                                                 <th>Jumlah</th>
-                                                <th>Penerima Stock</th>
-                                                <th>Aksi</th> 
+                                                <th>Kepada</th>
+                                                <th>Status</th>  
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         
-                                        <!-- Menampilkan data yang ada pada tabel database ke dalam tabel stock -->
+                                        <!-- Menampilkan data yang ada pada tabel database ke dalam tabel peminjaman barang -->
                                         <tbody>
-                                            <?php
+                                        <?php
 
-                                            if(isset($_POST['filter_tgl'])){
-                                                $mulai = $_POST['tgl_mulai'];
-                                                $selesai = $_POST['tgl_selesai'];
+                                        if(isset($_POST['filter_tgl'])){
+                                            $mulai = $_POST['tgl_mulai'];
+                                            $selesai = $_POST['tgl_selesai'];
 
-                                                if($mulai!=null || $selesai!=null){
-                                                    $result = mysqli_query($conn, "SELECT * FROM masuk m JOIN stock s ON s.idbarang = m.idbarang 
-                                                    WHERE m.tanggal BETWEEN '$mulai' AND DATE_ADD('$selesai', INTERVAL 1 DAY) ORDER BY m.idmasuk DESC");
-                                                } else {
-                                                    $result = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");
-                                                }
-                                                
+                                            if($mulai!=null || $selesai!=null) {
+                                                $result = mysqli_query($conn, "SELECT * FROM peminjaman m JOIN stock s ON s.idbarang = m.idbarang 
+                                                WHERE m.tanggalpinjam BETWEEN '$mulai' AND DATE_ADD('$selesai', INTERVAL 1 DAY) ORDER BY m.idpeminjaman DESC");
                                             } else {
-                                                $result = mysqli_query($conn, "select * from masuk m, stock s where s.idbarang = m.idbarang");
+                                                $result = mysqli_query($conn, "SELECT * FROM peminjaman m, stock s WHERE s.idbarang = m.idbarang");
                                             }
-                                                
-                                            $i= 1;                                     
-                                            while($row = mysqli_fetch_assoc($result)) {
-                                                $idm = $row['idmasuk'];
-                                                $idbarang = $row['idbarang'];
-                                                $namabarang = $row['namabarang'];
-                                                $tanggal = $row['tanggal'];
-                                                $quantity = $row['qty'];
-                                                $penerima = $row['penerima'];
-                                                $unik_id = $idbarang . '-' . $idm;
+                                        } else {
+                                            $result = mysqli_query($conn, "SELECT * FROM peminjaman p JOIN stock s ON s.idbarang = p.idbarang ORDER BY p.idpeminjaman DESC");
+                                        }
 
-                                                // Cek ada gambar atau tidak
-                                                $image = $row['image'];
-                                                if($image==null){
-                                                    // jika tidak ada gambar
-                                                    $img = 'No Photo';
-                                                } else {
-                                                    // jika ada gambar
-                                                    $img = '<img src="images/'.$image.'" class="zoomable">';
-                                                }
-                                            ?>
+                                        while($row = mysqli_fetch_assoc($result)) {
+                                            $idpeminjaman = $row['idpeminjaman'];
+                                            $idbarang = $row['idbarang'];
+                                            $namabarang = $row['namabarang'];
+                                            $tanggal = $row['tanggalpinjam'];
+                                            $quantity = $row['qty'];
+                                            $peminjam = $row['peminjam'];
+                                            $status = $row['status'];
+                                            $unik_id = $idbarang . '-' . $idpeminjaman;
 
+                                            // Cek ada gambar atau tidak
+                                            $image = $row['image'];
+                                            if($image==null){
+                                                $img = 'No Photo';
+                                            } else {
+                                                $img = '<img src="images/'.$image.'" class="zoomable">';
+                                            }
+                                        ?>
                                             <tr>
-                                                <td><?=$i++;?></td>
-                                                <td><?=$img;?></td>
-                                                <td><?=$namabarang;?></td>
                                                 <td><?=$tanggal;?></td>
+                                                <td><?=$namabarang;?></td>
+                                                <td><?=$img;?></td>
                                                 <td><?=$quantity;?></td>
-                                                <td><?=$penerima;?></td>
+                                                <td><?=$peminjam;?></td>
+                                                <td><?=$status;?></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#edit<?=$unik_id;?>">
-                                                        Edit
-                                                    </button>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete<?=$unik_id;?>">
-                                                        Delete
-                                                    </button>
+                                                    <?php
+                                                        // cek status
+                                                        if($status == 'Dipinjam') {
+                                                            echo '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit'.$unik_id.'">Selesai</button>';
+                                                        } else {
+                                                            // jika statusnya sudah bukan dipinjam (kembali)
+                                                            echo '<button type="button" class="btn btn-secondary" disabled>Barang telah kembali</button>';
+                                                        }
+                                                    ?>
                                                 </td>
                                             </tr>
 
@@ -202,54 +212,26 @@ $total_stock = $row2['total_stock'];
                                             <div class="modal fade" id="edit<?=$unik_id;?>">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
-                                                        
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title">Edit Barang</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        </div>
-                                                        
-                                                        <form method="post">
-                                                        <div class="modal-body">
-                                                            <input type="number" name="qty" value="<?=$quantity;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="text" name="penerima" value="<?=$penerima;?>" class="form-control" required>
-                                                            <br>
-                                                            <input type="hidden" name="idbarang" value="<?=$idbarang;?>">
-                                                            <input type="hidden" name="idm" value="<?=$idm;?>">
-                                                            <button type="submit" class="btn btn-primary" name="updatebarangmasuk">Submit</button>
-                                                        </div>
-                                                        </form>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Delete Modal -->
-                                            <div class="modal fade" id="delete<?=$unik_id;?>">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Delete Barang</h4>
+                                                            <h4 class="modal-title">Selesaikan</h4>
                                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                         </div>
                                                         <form method="post">
                                                             <div class="modal-body">
-                                                                Apakah Anda yakin ingin menghapus <?=$namabarang;?>?
+                                                                Apakah Barang ini sudah selesai dipinjam ?
+                                                                <br><br>
+                                                                <input type="hidden" name="idpeminjaman" value="<?=$idpeminjaman;?>">
                                                                 <input type="hidden" name="idbarang" value="<?=$idbarang;?>">
-                                                                <input type="hidden" name="kty" value="<?=$quantity;?>">
-                                                                <input type="hidden" name="idm" value="<?=$idm;?>">
-                                                                <br>
-                                                                <br>
-                                                                <button type="submit" class="btn btn-danger" name="deletebarangmasuk">Delete</button>
+                                                                <button type="submit" class="btn btn-primary" name="barangkembali">Sudah</button>
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
-                            
-                                            <?php
-                                            }
-                                            ?>
+                                        <?php
+                                        }
+                                        ?>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -270,20 +252,20 @@ $total_stock = $row2['total_stock'];
         <script src="assets/demo/datatables-demo.js"></script>
     </body>
 
-    <!-- form untuk menambahkan data barang-->
-    <div class="modal fade" id="myModal">
+    
+<!-- form untuk menambahkan data barang-->
+<div class="modal fade" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
       
         <div class="modal-header">
-          <h4 class="modal-title">Tambah Barang</h4>
+          <h4 class="modal-title">Tambah Data Peminjaman</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
         <form action="" method="post">
             <div class="modal-body">
-                
-                <select name="barangnya" class="form-control">
+            <select name="barangnya" class="form-control">
                     <?php 
                         $ambilsemuadatanya = mysqli_query($conn,"select * from stock");
                         while($fetcharray = mysqli_fetch_array($ambilsemuadatanya)){
@@ -298,8 +280,8 @@ $total_stock = $row2['total_stock'];
                         ?>
                 </select> <br>
                 <input type="number"  name="qty" placeholder="Quantity" class="form-control" required><br>
-                <input type="text"  name="penerima" placeholder="Penerima" class="form-control" required><br>
-                <button type="submit" class="btn btn-primary" name="barangmasuk">Submit</button><br>
+                <input type="text"  name="peminjam" placeholder="Peminjam" class="form-control" required><br>
+                <button type="submit" class="btn btn-primary" name="pinjam">Submit</button><br>
             </div>
         </form>
 

@@ -1,6 +1,17 @@
 <?php 
 require 'function.php';
 require 'cek.php';
+
+// Get data 
+
+// Mengambil jumlah total data barang keluar yang ada
+$get1 = mysqli_query($conn, "SELECT * FROM keluar");
+$count1 = mysqli_num_rows($get1);
+
+// Mengambil jumlah semua stock yang ada pada tabel barang keluar
+$get2 = mysqli_query($conn, "SELECT SUM(qty) AS total_stock FROM keluar");
+$row2 = mysqli_fetch_assoc($get2);
+$total_stock = $row2['total_stock'];
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +57,10 @@ require 'cek.php';
                             <a class="nav-link" href="keluar.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
                                 Barang keluar
+                            </a>
+                            <a class="nav-link" href="peminjaman.php">       
+                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                Peminjaman Barang
                             </a>
                             <a class="nav-link" href="admin.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
@@ -98,6 +113,19 @@ require 'cek.php';
                                 </div>
                             </div>
                             <div class="card-body">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="card bg-info text-white p-2">
+                                            <h6 class="m-0">Total Data Barang Keluar : <?=$count1;?></h6>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="card bg-danger text-white p-2">
+                                            <h6 class="m-0">Total Barang Yang Keluar : <?=$total_stock;?> Barang</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>

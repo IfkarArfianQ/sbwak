@@ -284,6 +284,7 @@ if (isset($_POST['updatebarangkeluar'])) {
     $dataqtysaatini = mysqli_fetch_array($queryqtysaatini);
     $qtysaatini = $dataqtysaatini['qty'];
 
+    // Hitung selisih qty baru dengan qty saat ini
     if ($quantitybaru > $qtysaatini) {
         $selisih = $quantitybaru - $qtysaatini;
         $stockbaru = $stocksaatini - $selisih; // Kurangi selisih dari stock saat ini
@@ -292,18 +293,23 @@ if (isset($_POST['updatebarangkeluar'])) {
         $stockbaru = $stocksaatini + $selisih; // Tambahkan selisih ke stock saat ini
     }
 
-    // Update stock dan data barang keluar
-    $updatestock = mysqli_query($conn, "UPDATE stock SET stock='$stockbaru' WHERE idbarang='$idbarang'");
-    $updatebarangkeluar = mysqli_query($conn, "UPDATE keluar SET qty='$quantitybaru', pengirim='$pengirim' WHERE idkeluar='$idkeluar'");
-
-    if ($updatestock && $updatebarangkeluar) {
-        echo "<script>alert('Data Berhasil Diubah');</script>";
-        header('location: keluar.php');
+    // Cek apakah stok cukup atau tidak
+    if ($stockbaru < 0) {
+        echo "<script>alert('Barang tidak mencukupi !');</script>";
     } else {
-        echo "<script>alert('Data Gagal Diubah');</script>";
-        header('location: keluar.php');
+        // Update stok baru dan data barang keluar
+        $updatequery = mysqli_query($conn, "UPDATE stock SET stock='$stockbaru' WHERE idbarang='$idbarang'");
+        $updatekeluar = mysqli_query($conn, "UPDATE keluar SET qty='$quantitybaru', pengirim='$pengirim' WHERE idkeluar='$idkeluar'");
+
+        if ($updatequery && $updatekeluar) {
+            echo "<script>alert('Barang keluar berhasil diupdate.');</script>";
+            header('Location: keluar.php');
+        } else {
+            echo "<script>alert('Gagal mengupdate barang keluar.');</script>";
+        }
     }
 }
+
 
 // Menghapus info barang keluar (DELETE)
 if (isset($_POST['deletebarangkeluar'])) {
@@ -385,5 +391,81 @@ if (isset($_POST['deleteadmin'])) {
     }
 }
 
+// peminjaman barang
+if(isset($_POST['pinjam'])){
+    $idbarang = $_POST['barangnya'];
+    $peminjam = $_POST['peminjam'];
+    $qty = $_POST['qty'];
 
+    // ambil stock sekarang
+    $stok_saat_ini = mysqli_query($conn,"SELECT * FROM stock WHERE idbarang='$idbarang'");
+    $stok_nya = mysqli_fetch_array($stok_saat_ini);
+    $stok = $stok_nya['stock']; 
+
+    // kurangi stocknya
+    $new_stock = $stok - $qty;
+
+    // mulai query insert
+    $insertpinjam = mysqli_query($conn,"INSERT INTO peminjaman(idbarang, peminjam, qty) values
+    ('$idbarang','$peminjam','$qty')");
+
+    //  Mengurangi stock di table stock
+    $kurangistok = mysqli_query($conn,"UPDATE stock SET stock='$new_stock' WHERE idbarang='$idbarang'");
+
+    if($insertpinjam && $kurangistok){
+        // jika berhasil
+        echo 
+        "<script>
+        alert('Telah berhasil ditambahkan');
+        window.location.href='peminjaman.php';
+        </script>";
+    } else {
+        // jika gagal
+        "<script>
+        alert('Gagal ditambahkan');
+        window.location.href='peminjaman.php';
+        </script>";
+    }
+}
+
+// menyelesaikan pinjaman
+if(isset($_POST['barangkembali'])){
+    $idpeminjaman = $_POST['idpeminjaman']; 
+    $idbarang = $_POST['idbarang'];
+
+    // Update status menjadi 'kembali'
+    $updatestatus = mysqli_query($conn, "UPDATE peminjaman SET status='Kembali' WHERE idpeminjaman='$idpeminjaman'");
+
+    // Ambil stok sekarang
+    $stoksaatini = mysqli_query($conn, "SELECT * FROM stock WHERE idbarang='$idbarang'");
+    $datastok = mysqli_fetch_array($stoksaatini);
+    $stoksekarang = $datastok['stock'];
+
+    // Ambil qty dari idpeminjaman sekarang
+    $peminjamansaatini = mysqli_query($conn, "SELECT * FROM peminjaman WHERE idpeminjaman='$idpeminjaman'");
+    $datapeminjaman = mysqli_fetch_array($peminjamansaatini);
+    $qtydipinjam = $datapeminjaman['qty'];
+
+    // Tambahkan stoknya
+    $stokbaru = $stoksekarang + $qtydipinjam;
+
+    // Kembalikan stoknya
+    $kembalikanstok = mysqli_query($conn, "UPDATE stock SET stock='$stokbaru' WHERE idbarang='$idbarang'");
+
+    if($updatestatus && $kembalikanstok){
+        // Jika berhasil
+        echo 
+        "<script>
+        alert('Telah berhasil dikembalikan');
+        window.location.href='peminjaman.php';
+        </script>";
+    } else {
+        // Jika gagal
+        echo 
+        "<script>
+        alert('Gagal dikembalikan');
+        window.location.href='peminjaman.php';
+        </script>";
+    }
+} 
 ?>

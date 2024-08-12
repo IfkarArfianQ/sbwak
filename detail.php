@@ -96,14 +96,12 @@ $image = $fetch['image'];
                                         ?>
                                     </div>
                                 </div>
-                                <br>
+                                <br><br>                             
                                 <div class="row">
-                                    <div class="col">Deskripsi</div>    
-                                    <div class="col">: <?=$deskripsi?></div>
+                                    <div class="col"><h6>Deskripsi : <?=$deskripsi?></h6></div>
                                 </div>
                                 <div class="row">
-                                    <div class="col">Stock</div>
-                                    <div class="col">: <?=$stock?></div>
+                                    <div class="col"><h6>Stock : <?=$stock?></h6></div>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,11 @@
 <?php 
 require 'function.php';
 require 'cek.php';
+
+// Mengambil jumlah total data Admin yang ada
+$get1 = mysqli_query($conn, "SELECT * FROM login");
+$count1 = mysqli_num_rows($get1);
+
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +43,10 @@ require 'cek.php';
                             <a class="nav-link" href="keluar.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
                                 Barang keluar
+                            </a>
+                            <a class="nav-link" href="peminjaman.php">       
+                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                Peminjaman Barang
                             </a>
                             <a class="nav-link" href="admin.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
@@ -77,6 +86,14 @@ require 'cek.php';
                         </div>
                     </div>
                             <div class="card-body">
+                                <div class="row">
+                                    <div class="col-auto">
+                                         <div class="card bg-info text-white p-2">
+                                            <h6 class="m-0">Total Data Admin : <?=$count1;?></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
