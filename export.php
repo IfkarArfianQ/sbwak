@@ -79,7 +79,7 @@ $(document).ready(function() {
   $('#mauexport').DataTable({
     dom: 'Bfrtip',
     buttons: [
-      'copy', 'csv', 'excel', 'pdf', 'print'
+      'csv', 'excel', 'pdf', 'print'
     ],
     "pagingType": "full_numbers"
   });

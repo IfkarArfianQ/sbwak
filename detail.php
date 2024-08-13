@@ -27,12 +27,30 @@ $image = $fetch['image'];
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
         <style>
-            .zoomable {
-                width: 150px;
+            body {
+                background-color: #f4f4f4;
             }
-            a {
-                text-decoration: none;
-                color: black;
+            .zoomable {
+                width: 250px;
+                transition: transform 0.3s ease-in-out;
+            }
+            .zoomable:hover {
+                transform: scale(1.2);
+            }
+            .card {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-radius: 10px;
+            }
+            .table th, .table td {
+                vertical-align: middle;
+            }
+            .table-responsive {
+                border-radius: 10px;
+                overflow: hidden;
+            }   
+            .thead-secondary {
+                background-color: #f4f4f4; 
+                color: black; 
             }
         </style>
     </head>
@@ -52,15 +70,19 @@ $image = $fetch['image'];
                                 Stock Barang
                             </a>
                             <a class="nav-link" href="masuk.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-right mr-1"></i></div>
                                 Barang Masuk
                             </a>
                             <a class="nav-link" href="keluar.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-left mr-1"></i></div>
                                 Barang Keluar
                             </a>
+                            <a class="nav-link" href="peminjaman.php">       
+                                <div class="sb-nav-link-icon"><i class="fas fa-handshake mr-1"></i></div>
+                                Peminjaman Barang
+                            </a>
                             <a class="nav-link" href="admin.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user mr-1"></i></div>
                                 Kelola Admin
                             </a>
                             <br><br>
@@ -78,46 +100,60 @@ $image = $fetch['image'];
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid">
-                        <h1 class="mt-4">Detail Barang</h1>
+                    <h1 class="mt-4">
+                    <h1 class="mt-4">
+                        <a href="index.php" class="btn btn-dark mb-2"><i class="fas fa-arrow-left"></i></a>
+                        <span class="ml-2">Detail Barang</span>
+                    </h1><br>
                         <div class="card mb-4">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col"><h2><?=$nama?></h2></div>
                                 </div>
-                                <br>
+                                <br><br>
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col text-center">
                                         <?php
                                         if ($image == null) {
                                             echo 'No Photo';
                                         } else {
-                                            echo '<img src="images/'.$image.'" class="zoomable">';
+                                            echo '<img src="images/'.$image.'" class="zoomable img-fluid">';
                                         }
                                         ?>
                                     </div>
                                 </div>
                                 <br><br>                             
                                 <div class="row">
-                                    <div class="col"><h6>Deskripsi : <?=$deskripsi?></h6></div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Deskripsi</h5>
+                                            <p class="card-text"><?=$deskripsi?></p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col"><h6>Stock : <?=$stock?></h6></div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Stock</h5>
+                                            <p class="card-text"><?=$stock?></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
                         <br>
                         <h2>Barang Masuk</h2>
                         <br>
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table mr-1"></i>
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-arrow-right mr-1"></i>
                                 Data Tabel Barang Masuk
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
+                                        <thead class="thead-secondary">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Tanggal</th>
@@ -153,14 +189,14 @@ $image = $fetch['image'];
                         <h2>Barang Keluar</h2>
                         <br>
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table mr-1"></i>
+                            <div class="card-header bg-danger text-white">
+                                <i class="fas fa-arrow-left mr-1"></i>
                                 Data Tabel Barang Keluar
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
+                                        <thead class="thead-secondary">
                                             <tr>
                                                 <th>No</th>
                                                 <th>Tanggal</th>

@@ -35,7 +35,23 @@ $count3 =  mysqli_num_rows($get3);
                 width: 100px;
             }
             .tambahkan{
-                margin-right: 200px;
+                margin-right: 150px;
+            }
+            .shaddow {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-radius: 10px;
+            }
+            .table th, .table td {
+                vertical-align: middle;
+                text-align: center;
+            }
+            .table-responsive {
+                border-radius: 10px;
+                overflow: hidden;
+            }   
+            .thead-secondary {
+                background-color: #f4f4f4; 
+                color: black; 
             }
         </style>
     </head>
@@ -55,19 +71,19 @@ $count3 =  mysqli_num_rows($get3);
                                 Stock Barang
                             </a>
                             <a class="nav-link" href="masuk.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-right mr-1"></i></div>
                                 Barang Masuk
                             </a>
                             <a class="nav-link" href="keluar.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
-                                Barang keluar
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-left mr-1"></i></div>
+                                Barang Keluar
                             </a>
                             <a class="nav-link" href="peminjaman.php">       
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-handshake mr-1"></i></div>
                                 Peminjaman Barang
                             </a>
                             <a class="nav-link" href="admin.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user mr-1"></i></div>
                                 Kelola Admin
                             </a>
                             <br><br>
@@ -91,14 +107,14 @@ $count3 =  mysqli_num_rows($get3);
                         </ol>
                         
                         <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                                 <div>
-                                    <i class="fas fa-table mr-1"></i>
+                                    <i class="fas fa-handshake mr-1"></i>
                                     Data Table Peminjaman Barang
                                 </div>
                                 <!-- Button untuk membuka form insert-->
-                                <button type="button" class="tambahkan btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-                                    Tambahkan
+                                <button type="button" class="tambahkan btn btn-light text-info btn-sm" data-toggle="modal" data-target="#myModal">
+                                    <strong>Tambahkan</strong>
                                 </button>
                                 <br>
 
@@ -113,26 +129,26 @@ $count3 =  mysqli_num_rows($get3);
                                                 <label for="tgl_selesai" class="mr-2">Tanggal Selesai :</label>
                                                 <input type="date" id="tgl_selesai" name="tgl_selesai" class="form-control mr-2">
                                             </div>
-                                            <button type="submit" name="filter_tgl" class="btn btn-info">Filter</button>
+                                            <button type="submit" name="filter_tgl" class="btn btn-light text-info"><strong>Filter</strong></button>
                                         </form>
                                     </div>
                                 </div>
                             </div>          
                             
-                            <div class="card-body">
+                            <div class="shaddow card-body">
                             <div class="row">
                                 <div class="col-auto">
-                                    <div class="card bg-info text-white p-2">
+                                    <div class="card bg-light text-dark p-2">
                                         <h6 class="m-0">Total Data : <?=$count1;?></h6>
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="card bg-danger text-white p-2">
+                                    <div class="card bg-light text-dark p-2">
                                         <h6 class="m-0">Dipinjam : <?=$count2;?></h6>
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="card bg-success text-white p-2">
+                                    <div class="card bg-light text-dark p-2">
                                         <h6 class="m-0">Dikembalikan : <?=$count3;?></h6>
                                     </div>
                                 </div>
@@ -142,6 +158,7 @@ $count3 =  mysqli_num_rows($get3);
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>Tanggal</th>
                                                 <th>Nama Barang</th>
                                                 <th>Gambar</th>
@@ -169,7 +186,7 @@ $count3 =  mysqli_num_rows($get3);
                                         } else {
                                             $result = mysqli_query($conn, "SELECT * FROM peminjaman p JOIN stock s ON s.idbarang = p.idbarang ORDER BY p.idpeminjaman DESC");
                                         }
-
+                                        $i = 1 ;
                                         while($row = mysqli_fetch_assoc($result)) {
                                             $idpeminjaman = $row['idpeminjaman'];
                                             $idbarang = $row['idbarang'];
@@ -189,6 +206,7 @@ $count3 =  mysqli_num_rows($get3);
                                             }
                                         ?>
                                             <tr>
+                                                <td><?=$i++;?></td>
                                                 <td><?=$tanggal;?></td>
                                                 <td><?=$namabarang;?></td>
                                                 <td><?=$img;?></td>

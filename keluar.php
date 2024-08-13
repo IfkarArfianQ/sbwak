@@ -33,6 +33,22 @@ $total_stock = $row2['total_stock'];
             .tambahkan{
                 margin-right: 230px;
             }
+            .shaddow {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-radius: 10px;
+            }
+            .table th, .table td {
+                vertical-align: middle;
+                text-align: center;           
+            }
+            .table-responsive {
+                border-radius: 10px;
+                overflow: hidden;
+            }   
+            .thead-secondary {
+                background-color: #f4f4f4; 
+                color: black; 
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -51,19 +67,19 @@ $total_stock = $row2['total_stock'];
                                 Stock Barang
                             </a>
                             <a class="nav-link" href="masuk.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-right mr-1"></i></div>
                                 Barang Masuk
                             </a>
                             <a class="nav-link" href="keluar.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
-                                Barang keluar
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-left mr-1"></i></div>
+                                Barang Keluar
                             </a>
                             <a class="nav-link" href="peminjaman.php">       
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-handshake mr-1"></i></div>
                                 Peminjaman Barang
                             </a>
                             <a class="nav-link" href="admin.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user mr-1"></i></div>
                                 Kelola Admin
                             </a>
                             <br><br>
@@ -87,14 +103,14 @@ $total_stock = $row2['total_stock'];
                         </ol>
                         
                         <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
                                 <div>
-                                    <i class="fas fa-table mr-1"></i>
-                                    Data Table Barang Masuk
+                                    <i class="fas fa-arrow-left mr-1"></i>
+                                    Data Table Barang Keluar
                                 </div>
                                 <!-- Button untuk membuka form insert-->
-                                <button type="button" class="tambahkan btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-                                    Tambahkan
+                                <button type="button" class="tambahkan btn btn-light text-danger btn-sm" data-toggle="modal" data-target="#myModal">
+                                    <strong>Tambahkan</strong>
                                 </button>
                                 <div class="row">
                                     <div class="col">
@@ -107,20 +123,20 @@ $total_stock = $row2['total_stock'];
                                                 <label for="tgl_selesai" class="mr-2">Tanggal Selesai :</label>
                                                 <input type="date" id="tgl_selesai" name="tgl_selesai" class="form-control mr-2">
                                             </div>
-                                            <button type="submit" name="filter_tgl" class="btn btn-info">Filter</button>
+                                            <button type="submit" name="filter_tgl" class="btn btn-light text-danger"><strong>Filter</strong></button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            <div class="shaddow card-body">
                                 <div class="row">
                                     <div class="col-auto">
-                                        <div class="card bg-info text-white p-2">
+                                        <div class="card bg-light text-dark p-2">
                                             <h6 class="m-0">Total Data Barang Keluar : <?=$count1;?></h6>
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <div class="card bg-danger text-white p-2">
+                                        <div class="card bg-light text-dark p-2">
                                             <h6 class="m-0">Total Barang Yang Keluar : <?=$total_stock;?> Barang</h6>
                                         </div>
                                     </div>
@@ -152,10 +168,10 @@ $total_stock = $row2['total_stock'];
                                                     $result = mysqli_query($conn, "SELECT * FROM keluar m JOIN stock s ON s.idbarang = m.idbarang 
                                                     WHERE m.tanggal BETWEEN '$mulai' AND DATE_ADD('$selesai', INTERVAL 1 DAY) ORDER BY m.idkeluar DESC");
                                                 } else {
-                                                    $result = mysqli_query($conn, "select * from keluar m, stock s where s.idbarang = m.idbarang");
+                                                    $result = mysqli_query($conn, "SELECT * FROM keluar m, stock s WHERE s.idbarang = m.idbarang ORDER BY m.tanggal DESC, m.idkeluar DESC");
                                                 }
                                             } else {
-                                                $result = mysqli_query($conn, "select * from keluar m, stock s where s.idbarang = m.idbarang");
+                                                $result = mysqli_query($conn, "SELECT * FROM keluar m, stock s WHERE s.idbarang = m.idbarang ORDER BY m.tanggal DESC, m.idkeluar DESC");
                                             }
                                                 
                                             $i= 1;

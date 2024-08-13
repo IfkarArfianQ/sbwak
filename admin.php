@@ -20,6 +20,23 @@ $count1 = mysqli_num_rows($get1);
         <link href="css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+        <style>
+            .shaddow {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-radius: 10px;
+            }
+            .table th, .table td {
+                vertical-align: middle;
+            }
+            .table-responsive {
+                border-radius: 10px;
+                overflow: hidden;
+            }   
+            .thead-secondary {
+                background-color: #f4f4f4; 
+                color: black; 
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -37,19 +54,19 @@ $count1 = mysqli_num_rows($get1);
                                 Stock Barang
                             </a>
                             <a class="nav-link" href="masuk.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-right mr-1"></i></div>
                                 Barang Masuk
                             </a>
                             <a class="nav-link" href="keluar.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
-                                Barang keluar
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-left mr-1"></i></div>
+                                Barang Keluar
                             </a>
                             <a class="nav-link" href="peminjaman.php">       
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-handshake mr-1"></i></div>
                                 Peminjaman Barang
                             </a>
                             <a class="nav-link" href="admin.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user mr-1"></i></div>
                                 Kelola Admin
                             </a>
                             <br><br>
@@ -73,22 +90,22 @@ $count1 = mysqli_num_rows($get1);
                         </ol>
                         
                         <div class="card mb-4">
-                        <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                         <div>
-                            <i class="fas fa-table mr-1"></i>
+                            <i class="fas fa-user mr-1"></i>
                             Data Table Admin
                         </div>
                         <!-- Button group container -->
                         <div class="d-flex">
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-                                Tambah Admin
+                            <button type="button" class="btn btn-light text-info btn-sm" data-toggle="modal" data-target="#myModal">
+                                <strong>Tambah Admin</strong>
                             </button>
                         </div>
                     </div>
-                            <div class="card-body">
+                            <div class="shaddow card-body">
                                 <div class="row">
                                     <div class="col-auto">
-                                         <div class="card bg-info text-white p-2">
+                                         <div class="card bg-light text-dark p-2">
                                             <h6 class="m-0">Total Data Admin : <?=$count1;?></h6>
                                         </div>
                                     </div>

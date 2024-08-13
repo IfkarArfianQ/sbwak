@@ -31,9 +31,22 @@ $total_stock = $row2['total_stock'];
             .zoomable{
                 width: 100px;
             }
-            a{
-                text-decoration: none;
-                color: black;
+            .shaddow {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-radius: 10px;
+            }
+            .table th, .table td {
+                vertical-align: middle;
+                text-align: center;
+                
+            }
+            .table-responsive {
+                border-radius: 10px;
+                overflow: hidden;
+            }   
+            .thead-secondary {
+                background-color: #f4f4f4; 
+                color: black; 
             }
         </style>
     </head>
@@ -53,19 +66,19 @@ $total_stock = $row2['total_stock'];
                                 Stock Barang
                             </a>
                             <a class="nav-link" href="masuk.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-right mr-1"></i></div>
                                 Barang Masuk
                             </a>
                             <a class="nav-link" href="keluar.php">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
-                                Barang keluar
+                                <div class="sb-nav-link-icon"><i class="fas fa-arrow-left mr-1"></i></div>
+                                Barang Keluar
                             </a>
                             <a class="nav-link" href="peminjaman.php">       
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-handshake mr-1"></i></div>
                                 Peminjaman Barang
                             </a>
-                            <a class="nav-link" href="admin.php">       
-                                <div class="sb-nav-link-icon"><i class="fas fa-table mr-1"></i></div>
+                            <a class="nav-link" href="admin.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user mr-1"></i></div>
                                 Kelola Admin
                             </a>
                             <br><br>
@@ -89,23 +102,23 @@ $total_stock = $row2['total_stock'];
                         </ol>
                         
                         <div class="card mb-4">
-                        <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                         <div>
                             <i class="fas fa-table mr-1"></i>
                             Data Table Barang
                         </div>
                         <!-- Button group container -->
                         <div class="d-flex">
-                            <a href="export.php" class="btn btn-secondary btn-sm mr-2">
-                                Export Data
+                            <a href="export.php" class="btn btn-light text-info btn-sm mr-2">
+                                <strong>Export Data</strong>
                             </a>
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-                                Tambahkan
+                            <button type="button" class="btn btn-light text-info btn-sm" data-toggle="modal" data-target="#myModal">
+                                <strong>Tambahkan</strong>
                             </button>
                         </div>
                     </div>
 
-                            <div class="card-body">
+                            <div class="shaddow card-body">
 
                             <?php 
                                 $ambildatastock = mysqli_query($conn,"SELECT * FROM stock WHERE stock < 1");
@@ -125,13 +138,13 @@ $total_stock = $row2['total_stock'];
                             ?>
                             <div class="row">
                                 <div class="col-auto">
-                                    <div class="card bg-info text-white p-2">
+                                    <div class="card bg-light text-dark p-2">
                                         <h6 class="m-0">Total Data Barang : <?=$count1;?></h6>
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="card bg-success text-white p-2">
-                                        <h6 class="m-0">Total Stock Barang Pada Gudang: <?=$total_stock;?> Barang</h6>
+                                    <div class="card bg-light text-dark p-2">
+                                        <h6 class="m-0">Total Stock Barang Pada Gudang : <?=$total_stock;?> Barang</h6>
                                     </div>
                                 </div>
                             </div>
@@ -141,19 +154,20 @@ $total_stock = $row2['total_stock'];
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
+                                                <th>#</th>
                                                 <th>Gambar</th>
                                                 <th>Nama Barang</th>
                                                 <th>Deskripsi</th>
                                                 <th>Stock</th>
-                                                <th>Aksi</th>  
+                                                <th>Aksi</th>
+                                                <th>Detail Barang</th>  
                                             </tr>
                                         </thead>
                                         
                                         <!-- Menampilkan data yang ada pada tabel database ke dalam tabel stock -->
                                         <tbody>
                                             <?php
-                                            $result = mysqli_query($conn, "select * from stock");
+                                            $result = mysqli_query($conn, "SELECT * FROM stock ORDER BY idbarang DESC");
                                             $i= 1;
                                             while($row = mysqli_fetch_assoc($result)) {
                                                 $idbarang = $row['idbarang']; 
@@ -175,7 +189,7 @@ $total_stock = $row2['total_stock'];
                                             <tr>
                                                 <td><?=$i++;?></td>
                                                 <td><?=$img;?></td>
-                                                <td><strong><a href="detail.php?id=<?=$idbarang?>"><?=$namabarang;?></a></strong></td>
+                                                <td><?=$namabarang;?></td>
                                                 <td><?=$deskripsi;?></td>
                                                 <td><?=$stock;?></td>
                                                 <td>
@@ -185,6 +199,11 @@ $total_stock = $row2['total_stock'];
                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete<?=$idbarang;?>">
                                                         Delete
                                                     </button>
+                                                </td>
+                                                <td>
+                                                <button type="button" class="btn btn-primary" onclick="window.location.href='detail.php?id=<?=$idbarang?>'">
+                                                    Detail
+                                                </button>
                                                 </td>
                                             </tr>
 
